@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>
+        AI Denim QC Dashboard
+    </title>
+
+    <!-- Bootstrap -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Custom CSS -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<!-- =========================================
+     TOP NAVIGATION BAR
+========================================= -->
+
+<nav class="top-navbar">
+
+    <!-- LEFT -->
+
+    <div class="navbar-left">
+
+        <div class="company-title">
+
+            IoTrenetics Solutions
+
+        </div>
+
+    </div>
+
+    <!-- CENTER -->
+
+    <div class="nav-links">
+
+        <!-- INSPECTION DROPDOWN -->
+
+        <div class="dropdown">
+
+            <button
+                class="nav-link-custom dropdown-btn">
+
+                🔍 Inspection ▼
+
+            </button>
+
+            <div class="dropdown-content">
+
+                <a href="/fabric_comparison">
+
+                    🧵 Fabric Comparison
+
+                </a>
+
+                <a href="/live_quality">
+
+                    🎥 Live Quality Inspection
+
+                </a>
+
+                <a href="/recipe_extraction">
+
+                    🎨 Recipe Extraction
+
+                </a>
+
+                <a href="/ai_reports">
+
+                    📑 AI Reports
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <a
+            href="/history"
+            class="nav-link-custom">
+
+            📜 History
+
+        </a>
+
+    </div>
+
+    <!-- RIGHT -->
+
+    <div class="navbar-right">
+
+        <button
+            class="lang-btn"
+            id="lang-btn"
+            onclick="toggleLanguage()">
+
+            🌐 हिन्दी
+
+        </button>
+
+        <button
+            class="theme-toggle"
+            onclick="toggleTheme()">
+
+            🌙 Theme
+
+        </button>
+
+        {% if current_user.is_authenticated %}
+
+    <span class="me-2">👤 {{ current_user.username }}</span>
+
+    <a href="/logout" class="btn btn-outline-danger btn-sm">
+        🚪 Logout
+    </a>
+
+{% else %}
+
+    <a href="/login" class="btn btn-outline-primary btn-sm">
+        🔑 Login
+    </a>
+
+{% endif %}
+
+{% if current_user.is_authenticated and current_user.role == "admin" %}
+
+    <a href="/admin" class="btn btn-outline-warning btn-sm">
+        🛠 Admin Panel
+    </a>
+
+{% endif %}
+
+    </div>
+
+</nav>
+
+<!-- =========================================
+     HERO SECTION
+========================================= -->
+
+<div class="container hero-section">
+
+    <!-- LIVE BADGE -->
+
+    <div class="live-badge">
+
+        🟢 LIVE AI ANALYSIS READY
+
+    </div>
+
+
+    <!-- MAIN TITLE -->
+
+    <div
+        class="hero-title"
+        id="hero-title">
+
+        AI Denim Dye<br>
+        Consistency Inspection System
+
+    </div>
+
+    
+
+    <!-- DESCRIPTION -->
+
+    <div
+        class="hero-description"
+        id="hero-description">
+
+        Real-time AI-powered denim inspection platform
+        designed for industrial dye consistency monitoring.
+        Perform LAB color analysis, Delta E comparison,
+        intelligent recipe recommendation, and live quality
+        inspection using computer vision and AI.
+
+    </div>
+
+    <br>
+
+    <!-- HERO BUTTONS -->
+
+    <div class="hero-buttons">
+
+        <a href="#features" class="btn btn-primary btn-lg">
+
+            🚀 Explore Platform
+
+        </a>
+
+    </div>
+
+</div>
+
+<!-- =========================================
+     FEATURES
+========================================= -->
+
+<div class="section-badge">
+
+    AI MODULES
+
+</div>
+
+<h2 class="section-heading">
+
+Everything You Need For Intelligent Denim Inspection
+
+</h2>
+
+<p class="section-subtitle">
+
+Built for textile manufacturers with AI-powered color analysis,
+live inspection, quality reporting and production monitoring.
+
+</p>
+
+<!-- =========================================
+     FEATURE CARDS
+========================================= -->
+
+<div class="container mt-5 mb-5">
+
+    <div class="row g-4 justify-content-center">
+
+        <!-- LIVE INSPECTION -->
+
+    <div class="col-lg-4 col-md-6">
+
+    <a
+        href="/live_quality"
+        class="text-decoration-none">
+
+        <div class="feature-card">
+
+            <div class="feature-badge live">
+
+                LIVE
+
+            </div>
+
+            <div class="feature-icon">
+
+                🎥
+
+            </div>
+
+            <div
+                class="feature-title">
+
+                Live Inspection
+
+            </div>
+
+            <div class="feature-text">
+
+                Perform real-time AI quality inspection using USB and RTSP cameras.
+
+            </div>
+
+        </div>
+
+    </a>
+
+</div>
+
+        <!-- FABRIC COMPARISON -->
+
+        <div class="col-lg-6 col-md-6">
+
+            <a
+                href="/fabric_comparison"
+                class="text-decoration-none">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+
+                        🧵
+
+                    </div>
+
+                    <div class="feature-title"
+                    id="fabric-title">
+
+                        Fabric Comparison
+
+                    </div>
+
+                    <div class="feature-text">
+
+                        Compare denim samples using
+                        Delta E analysis, LAB inspection
+                        and dominant shade extraction.
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <!-- RECIPE EXTRACTION -->
+
+        <div class="col-lg-4 col-md-6">
+
+            <a
+                href="/recipe_extraction"
+                class="text-decoration-none">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+
+                        🎨
+
+                    </div>
+
+                    <div class="feature-title"
+                    id="recipe-title">
+
+                        Recipe Extraction
+
+                    </div>
+
+                    <div class="feature-text">
+
+                        Generate intelligent dye
+                        composition recommendations
+                        from denim fabric samples.
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <!-- AI REPORTS -->
+
+        <div class="col-lg-4 col-md-6">
+
+            <a
+                href="/ai_reports"
+                class="text-decoration-none">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+
+                        📑
+
+                    </div>
+
+                    <div class="feature-title"
+                    id="reports-title">
+
+                        AI Reports
+
+                    </div>
+
+                    <div class="feature-text">
+
+                        Export AI inspection reports,
+                        QC summaries and textile
+                        analysis documents.
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+      <!-- HISTORY -->
+
+<div class="col-lg-4 col-md-6">
+
+    <a
+        href="/history"
+        class="text-decoration-none">
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+
+                📜
+
+            </div>
+
+            <div class="feature-title"
+            id="history-title">
+
+                Inspection History
+
+            </div>
+
+            <div class="feature-text">
+
+                View previous denim inspections,
+                Delta E comparison records and
+                saved AI fabric analysis history.
+
+            </div>
+
+        </div>
+
+    </a>
+
+</div>
+        
+<!-- =========================================
+     PLATFORM STATS
+========================================= -->
+
+<div class="container mt-5 mb-5">
+
+    <div class="stats-card">
+
+        <div class="row text-center">
+
+            <div class="col-md-3">
+
+                <h2>150+</h2>
+
+                <p>Fabric Comparisons</p>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <h2>98%</h2>
+
+                <p>Average Accuracy</p>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <h2>1.2</h2>
+
+                <p>Average Delta E</p>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <h2>24/7</h2>
+
+                <p>Inspection Ready</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================
+     FOOTER
+========================================= -->
+
+<div class="text-center text-secondary mb-4">
+
+    © 2026 IoTrenetics Solutions —
+    AI Textile Intelligence Platform
+
+</div>
+
+<script
+    src="{{ url_for('static',
+    filename='js/theme.js') }}">
+</script>
+
+<script
+    src="{{ url_for('static',
+    filename='js/language.js') }}">
+</script>
+
+</body>
+
+</html>
