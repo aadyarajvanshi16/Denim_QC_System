@@ -216,3 +216,28 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Generated results
+static/results/*
+!static/results/.gitkeep
+
+# Uploaded images
+uploads/reference/*
+uploads/test/*
+uploads/roi/*
+!uploads/reference/.gitkeep
+!uploads/test/.gitkeep
+!uploads/roi/.gitkeep
+
+# Generated reports
+reports/*
+!reports/.gitkeep
+
+# Environment
+.env
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
