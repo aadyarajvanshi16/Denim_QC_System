@@ -1,8 +1,0 @@
-Flask
-opencv-python
-numpy
-matplotlib
-scikit-image
-Pillow
-scikit-learn
-waitress
