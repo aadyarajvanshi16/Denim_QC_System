@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}AI Reports{% endblock %}
+{% block content %}
+
+<h1 class="text-center mb-4">📑 AI Generated Reports</h1>
+
+{% if reports %}
+<div class="grid grid-2">
+  {% for report in reports %}
+  <div class="card">
+    <h5 class="mb-3" style="word-break:break-all;">{{ report }}</h5>
+
+    <div class="flex gap-2 flex-wrap mb-3">
+      <a href="{{ url_for('reports.download_saved_report', filename=report) }}" class="btn btn-primary btn-sm">Download</a>
+      <form action="{{ url_for('reports.delete_report', filename=report) }}" method="POST"
+            data-confirm="Delete '{{ report }}'? This can't be undone.">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+      </form>
+    </div>
+
+    <form action="{{ url_for('reports.rename_report') }}" method="POST" class="flex gap-2">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="old_name" value="{{ report }}">
+      <input type="text" name="new_name" placeholder="New name (no extension)" pattern="[A-Za-z0-9_\-]+">
+      <button class="btn btn-outline btn-sm">Rename</button>
+    </form>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="card empty-state">
+  <div class="empty-icon">📑</div>
+  <h3>No AI reports generated yet</h3>
+  <p>Reports appear here after you run a fabric comparison or recipe extraction and download the PDF.</p>
+</div>
+{% endif %}
+
+{% endblock %}

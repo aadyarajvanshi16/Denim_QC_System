@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Select Regions{% endblock %}
+{% block content %}
+<div class="card">
+  <h2 class="card-title">Select the fabric region on each image</h2>
+  <p class="text-muted mb-4">Drag a box over the denim area you want compared, on both the reference and the test image.</p>
+
+  <form method="POST" action="{{ analyze_url }}" id="roiForm">
+    <div class="grid grid-2">
+      <div>
+        <h4>Reference</h4>
+        <div class="roi-frame" id="refFrame">
+          <img id="refImg" src="{{ ref_url }}" alt="Reference">
+          <div class="roi-box hidden" id="refBox"></div>
+        </div>
+        <div class="roi-status" id="refStatus">Drag on the image to select a region.</div>
+        <input type="hidden" name="ref_x" id="refX">
+        <input type="hidden" name="ref_y" id="refY">
+        <input type="hidden" name="ref_w" id="refW">
+        <input type="hidden" name="ref_h" id="refH">
+      </div>
+
+      <div>
+        <h4>Test</h4>
+        <div class="roi-frame" id="testFrame">
+          <img id="testImg" src="{{ test_url }}" alt="Test">
+          <div class="roi-box hidden" id="testBox"></div>
+        </div>
+        <div class="roi-status" id="testStatus">Drag on the image to select a region.</div>
+        <input type="hidden" name="test_x" id="testX">
+        <input type="hidden" name="test_y" id="testY">
+        <input type="hidden" name="test_w" id="testW">
+        <input type="hidden" name="test_h" id="testH">
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-lg btn-block mt-4" id="submitBtn">
+      🚀 Run AI Fabric Analysis
+    </button>
+    <div id="loadingState" class="loading-overlay hidden">
+      <div class="spinner"></div>
+      <span>Analyzing LAB values, Delta E and dye recipe…</span>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/roi_selector.js') }}"></script>
+<script>
+  window.addEventListener("load", () => {
+    initRoiSelector({
+      frameId: "refFrame", imgId: "refImg", boxId: "refBox", statusId: "refStatus",
+      xId: "refX", yId: "refY", wId: "refW", hId: "refH",
+    });
+    initRoiSelector({
+      frameId: "testFrame", imgId: "testImg", boxId: "testBox", statusId: "testStatus",
+      xId: "testX", yId: "testY", wId: "testW", hId: "testH",
+    });
+  });
+
+  document.getElementById("roiForm").addEventListener("submit", (e) => {
+    if (!document.getElementById("refW").value || !document.getElementById("testW").value) {
+      e.preventDefault();
+      alert("Please select a region on both images before running the analysis.");
+      return;
+    }
+    document.getElementById("submitBtn").disabled = true;
+    document.getElementById("loadingState").classList.remove("hidden");
+  });
+</script>
+{% endblock %}

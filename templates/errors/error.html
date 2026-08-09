@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Error {{ code }}{% endblock %}
+{% block content %}
+<div class="card empty-state" style="max-width:500px;margin:60px auto;">
+  <div class="empty-icon">
+    {% if code == 403 %}🔒{% elif code == 404 %}🧭{% elif code == 413 %}📦{% else %}⚠️{% endif %}
+  </div>
+  <h2>{{ code }}</h2>
+  <p>{{ message }}</p>
+  <a href="{{ url_for('dashboard.index') }}" class="btn btn-primary mt-3">Back to Dashboard</a>
+</div>
+{% endblock %}

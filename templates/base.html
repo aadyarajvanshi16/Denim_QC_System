@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<title>{% block title %}Denim QC{% endblock %} · IoTrenetics</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="{{ url_for('dashboard.index') }}" class="brand">
+      <span class="brand-mark">◆</span> IoTrenetics <span class="brand-sub">Denim QC</span>
+    </a>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+
+    <div class="nav-links" id="navLinks">
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('inspection.fabric_comparison') }}">🧵 Compare</a>
+        <a href="{{ url_for('inspection.live_quality') }}">🎥 Live</a>
+        <a href="{{ url_for('inspection.recipe_extraction') }}">🎨 Recipe</a>
+        <a href="{{ url_for('reports.ai_reports') }}">📑 Reports</a>
+        {% if current_user.role == 'admin' %}
+          <a href="{{ url_for('dashboard.history') }}">📜 History</a>
+          <a href="{{ url_for('admin.panel') }}">🛠 Admin</a>
+        {% endif %}
+      {% endif %}
+    </div>
+
+    <div class="nav-right">
+      <button class="icon-btn" id="themeToggle" title="Toggle theme">🌙</button>
+      {% if current_user.is_authenticated %}
+        <span class="user-chip">👤 {{ current_user.username }}</span>
+        <a href="{{ url_for('auth.logout') }}" class="btn btn-ghost btn-sm">Logout</a>
+      {% else %}
+        <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-sm">Login</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-stack">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">
+            <span>{{ message }}</span>
+            <button class="flash-close" onclick="this.parentElement.remove()">✕</button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  © 2026 IoTrenetics Solutions — AI Textile Intelligence Platform
+</footer>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

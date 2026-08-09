@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Live Quality Inspection{% endblock %}
+{% block content %}
+
+<h2 class="text-center mb-4">🎥 Industrial Real-Time Denim Inspection</h2>
+
+<div class="grid grid-2">
+
+  <!-- REFERENCE PANEL -->
+  <div class="card">
+    <h4 class="card-title">Reference</h4>
+
+    <input type="file" id="reference_input" accept="image/*" onchange="uploadReference()">
+    <div id="refUploadStatus" class="help-text mt-2"></div>
+
+    <div id="refRoiWrap" class="mt-3 hidden">
+      <div class="roi-frame" id="refFrame">
+        <img id="reference_preview" src="" alt="Reference">
+        <div class="roi-box hidden" id="refBox"></div>
+      </div>
+      <div class="roi-status" id="refStatus">Drag on the image to select a region.</div>
+      <button class="btn btn-warning mt-2" onclick="confirmRoi()">✂ Confirm ROI</button>
+      <span id="roiConfirmStatus" class="badge badge-fail ms-2">ROI Not Selected</span>
+    </div>
+  </div>
+
+  <!-- CAMERA PANEL -->
+  <div class="card">
+    <h4 class="card-title">Live Camera</h4>
+
+    <details class="mb-3">
+      <summary style="cursor:pointer;color:var(--text-muted);">📱 RTSP camera setup guide</summary>
+      <ol class="text-muted">
+        <li>Connect your laptop and phone to the same Wi-Fi.</li>
+        <li>Open your RTSP broadcaster app (e.g. Larix Broadcaster).</li>
+        <li>Stream to <code>rtsp://YOUR_IP:8554/live</code></li>
+        <li>Paste the same RTSP URL below and click Connect.</li>
+      </ol>
+      <div class="field">
+        <input type="text" id="rtsp_url" placeholder="rtsp://192.168.1.20:8554/live">
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="connectRTSP()">Connect RTSP Camera</button>
+      <span id="rtspStatus" class="help-text"></span>
+    </details>
+
+    <div class="text-center">
+      <video id="video" autoplay playsinline></video>
+      <canvas id="canvas" style="display:none;"></canvas>
+
+      <div class="flex flex-wrap gap-2 justify-center mt-3">
+        <button class="btn btn-outline btn-sm" onclick="startCamera()">💻 Laptop Camera</button>
+        <button class="btn btn-outline btn-sm" onclick="startPhoneCamera()">📱 Phone Camera (RTSP)</button>
+      </div>
+
+      <div class="flex flex-wrap gap-2 justify-center mt-3">
+        <button class="btn btn-primary" id="inspectionButton" onclick="startInspection()">▶ Start Inspection</button>
+        <button class="btn btn-danger" id="stopButton" onclick="stopInspection()">⏹ Stop Inspection</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="card mt-4" style="max-width:640px;margin-left:auto;margin-right:auto;">
+  <h3 class="text-center mb-3">Live Inspection Dashboard</h3>
+  <table>
+    <tr><th>Status</th><td><span id="status" class="badge">Waiting…</span></td></tr>
+    <tr><th>Color Match</th><td><span id="similarity">--</span> %</td></tr>
+    <tr><th>Color Difference (ΔE)</th><td><span id="deltae">--</span></td></tr>
+    <tr><th>AI Confidence</th><td><span id="confidence">--</span> %</td></tr>
+    <tr><th>L Value</th><td id="lvalue">--</td></tr>
+    <tr><th>A Value</th><td id="avalue">--</td></tr>
+    <tr><th>B Value</th><td id="bvalue">--</td></tr>
+  </table>
+</div>
+
+<div class="text-center text-muted mt-4">Powered by OpenCV • Flask • MediaMTX</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/roi_selector.js') }}"></script>
+<script src="{{ url_for('static', filename='js/live_quality.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<div class="hero">
+  <div class="hero-badge"><span class="live-dot"></span>LIVE AI ANALYSIS READY</div>
+  <h1>AI Denim Dye<br>Consistency Inspection System</h1>
+  <p>Real-time AI-powered denim inspection for industrial dye consistency monitoring —
+     LAB color analysis, Delta E comparison, intelligent recipe recommendation and
+     live quality inspection using computer vision.</p>
+</div>
+
+<div class="grid grid-3 mt-4">
+  <a href="{{ url_for('inspection.live_quality') }}" class="feature-card">
+    <div class="feature-icon">🎥</div>
+    <div class="feature-title">Live Inspection</div>
+    <div class="feature-text">Real-time AI quality inspection using USB and RTSP cameras.</div>
+  </a>
+
+  <a href="{{ url_for('inspection.fabric_comparison') }}" class="feature-card">
+    <div class="feature-icon">🧵</div>
+    <div class="feature-title">Fabric Comparison</div>
+    <div class="feature-text">Compare denim samples using Delta E, LAB inspection and shade extraction.</div>
+  </a>
+
+  <a href="{{ url_for('inspection.recipe_extraction') }}" class="feature-card">
+    <div class="feature-icon">🎨</div>
+    <div class="feature-title">Recipe Extraction</div>
+    <div class="feature-text">Generate intelligent dye composition recommendations from a sample.</div>
+  </a>
+
+  <a href="{{ url_for('reports.ai_reports') }}" class="feature-card">
+    <div class="feature-icon">📑</div>
+    <div class="feature-title">AI Reports</div>
+    <div class="feature-text">Export inspection reports, QC summaries and analysis documents.</div>
+  </a>
+
+  {% if current_user.role == 'admin' %}
+  <a href="{{ url_for('dashboard.history') }}" class="feature-card">
+    <div class="feature-icon">📜</div>
+    <div class="feature-title">Inspection History</div>
+    <div class="feature-text">Browse previous comparisons, Delta E records and QC outcomes.</div>
+  </a>
+
+  <a href="{{ url_for('admin.panel') }}" class="feature-card">
+    <div class="feature-icon">🛠</div>
+    <div class="feature-title">Admin Panel</div>
+    <div class="feature-text">Manage operators, permissions and QC thresholds.</div>
+  </a>
+  {% endif %}
+</div>
+
+{% endblock %}

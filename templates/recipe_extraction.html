@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Recipe Extraction{% endblock %}
+{% block content %}
+<div class="card" style="max-width:640px;margin:0 auto;">
+  <h2 class="card-title">AI Dye Recipe Recommendation</h2>
+  <p class="text-muted mb-4">
+    Upload a denim fabric sample or capture one with your camera. You'll pick the region
+    to analyze on the next step.
+  </p>
+
+  <form action="{{ url_for('inspection.recipe_extraction_upload') }}" method="POST" enctype="multipart/form-data" id="uploadForm">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="field">
+      <label>Upload Denim Sample</label>
+      <input type="file" name="image" id="fileInput" accept="image/*" required>
+    </div>
+    <button class="btn btn-primary btn-block btn-lg" id="submitBtn">Continue → Select Region</button>
+    <div id="loadingState" class="loading-overlay hidden">
+      <div class="spinner"></div>
+      <span>Uploading sample…</span>
+    </div>
+  </form>
+
+  <div class="text-center my-4"><h5 class="text-muted">───────── OR ─────────</h5></div>
+
+  <div class="text-center">
+    <button class="btn btn-success" onclick="startCamera()">📷 Open Camera</button>
+  </div>
+  <br>
+  <div class="text-center">
+    <video id="video" width="450" autoplay playsinline style="display:none;border-radius:14px;max-width:100%;"></video>
+  </div>
+  <br>
+  <div class="text-center">
+    <button id="captureBtn" class="btn btn-primary" onclick="captureImage()" style="display:none;">📸 Capture Image</button>
+  </div>
+
+  <div id="previewContainer" class="text-center mt-4" style="display:none;">
+    <h5>Captured Image</h5>
+    <img id="preview" style="max-width:320px;border-radius:14px;">
+  </div>
+
+  <div id="cameraLoading" class="loading-overlay hidden">
+    <div class="spinner"></div>
+    <span>Uploading captured sample…</span>
+  </div>
+
+  <canvas id="canvas" style="display:none;"></canvas>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/camera.js') }}"></script>
+<script>
+  document.getElementById("uploadForm").addEventListener("submit", () => {
+    document.getElementById("submitBtn").disabled = true;
+    document.getElementById("loadingState").classList.remove("hidden");
+  });
+</script>
+{% endblock %}

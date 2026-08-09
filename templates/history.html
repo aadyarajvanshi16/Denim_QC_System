@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Inspection History{% endblock %}
+{% block content %}
+
+<h1 class="mb-4">📜 Inspection History</h1>
+
+<div class="card mb-4">
+  <form method="GET" action="{{ url_for('dashboard.history') }}" class="grid grid-4" style="align-items:end;">
+    <div class="field" style="margin-bottom:0;">
+      <label>Status</label>
+      <select name="status">
+        <option value="" {{ 'selected' if not filters.status }}>All</option>
+        <option value="PASS" {{ 'selected' if filters.status == 'PASS' }}>Pass</option>
+        <option value="FAIL" {{ 'selected' if filters.status == 'FAIL' }}>Fail</option>
+      </select>
+    </div>
+    <div class="field" style="margin-bottom:0;">
+      <label>From</label>
+      <input type="date" name="from" value="{{ filters.from }}">
+    </div>
+    <div class="field" style="margin-bottom:0;">
+      <label>To</label>
+      <input type="date" name="to" value="{{ filters.to }}">
+    </div>
+    <button class="btn btn-primary">Filter</button>
+  </form>
+</div>
+
+<div class="card">
+  {% if history %}
+  <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr>
+          <th>Comp ID</th><th>Time</th><th>Operator</th><th>Reference</th><th>Test</th><th>Delta E</th><th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in history %}
+        <tr>
+          <td>{{ item.comp_id }}</td>
+          <td>{{ item.time }}</td>
+          <td>{{ item.operator }}</td>
+          <td>{{ item.reference }}</td>
+          <td>{{ item.test }}</td>
+          <td>{{ item.delta_e }}</td>
+          <td>
+            {% if item.status == "PASS" %}
+              <span class="badge badge-pass">APPROVED</span>
+            {% else %}
+              <span class="badge badge-fail">REJECTED</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon">📭</div>
+    <h3>No inspections yet</h3>
+    <p>Run a fabric comparison to see it show up here.</p>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

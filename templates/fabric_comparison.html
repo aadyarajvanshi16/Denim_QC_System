@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Fabric Comparison{% endblock %}
+{% block content %}
+<div class="card" style="max-width:640px;margin:0 auto;">
+  <h2 class="card-title">Compare Two Denim Samples</h2>
+  <p class="text-muted mb-4">Upload a reference and a test fabric image. You'll pick the exact region to compare on the next step.</p>
+
+  <form method="POST" action="{{ url_for('inspection.fabric_comparison_upload') }}" enctype="multipart/form-data" id="uploadForm">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <div class="field">
+      <label>Reference Fabric</label>
+      <input type="file" name="reference" id="reference_input" accept="image/*" required>
+      <button type="button" class="btn btn-outline btn-sm mt-2" onclick="startCamera('reference')">📷 Capture Reference</button>
+    </div>
+
+    <div class="field">
+      <label>Test Fabric</label>
+      <input type="file" name="test" id="test_input" accept="image/*" required>
+      <button type="button" class="btn btn-outline btn-sm mt-2" onclick="startCamera('test')">📷 Capture Test</button>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block btn-lg" id="submitBtn">Continue → Select Regions</button>
+    <div id="loadingState" class="loading-overlay hidden">
+      <div class="spinner"></div>
+      <span>Uploading images…</span>
+    </div>
+  </form>
+
+  <div class="text-center mt-4">
+    <video id="video" width="500" autoplay style="display:none;border-radius:14px;max-width:100%;"></video>
+    <br><br>
+    <button id="captureBtn" class="btn btn-primary" style="display:none;">Capture Image</button>
+  </div>
+  <canvas id="canvas" style="display:none;"></canvas>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/camera_compare.js') }}"></script>
+<script>
+  document.getElementById("uploadForm").addEventListener("submit", () => {
+    document.getElementById("submitBtn").disabled = true;
+    document.getElementById("loadingState").classList.remove("hidden");
+  });
+</script>
+{% endblock %}
